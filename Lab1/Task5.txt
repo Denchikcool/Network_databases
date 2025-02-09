@@ -1,0 +1,26 @@
+DECLARE
+    client_rating number(10);
+    client_name varchar2(50);
+    low_rating exception;
+    status varchar2(50);
+    return_code varchar2(50);
+BEGIN
+    --client_name := 'Clemens';
+    client_name := 'hello, dude';
+    SELECT rating INTO client_rating FROM cust WHERE cname = client_name;
+    IF client_rating < 200 THEN
+        RAISE low_rating;
+    END IF;
+    EXCEPTION 
+        when low_rating then
+        status := 'Rating lower than 200!';
+        return_code := 10;
+        DBMS_OUTPUT.PUT_LINE('Code = '||return_code||', status: '||status);
+        when OTHERS then
+        status := 'Unknown error!';
+        return_code := 5;
+        DBMS_OUTPUT.PUT_LINE('Code = '||return_code||', status: '||status);
+END;
+/
+
+        

@@ -1,0 +1,13 @@
+DECLARE
+    client_number number(4);
+    status varchar2(50);
+    return_code varchar2(50);
+BEGIN
+    SELECT cnum INTO client_number FROM cust WHERE rating > 500;
+    EXCEPTION
+        when OTHERS then
+        status := 'No data founded';
+        return_code := 5;
+        DBMS_OUTPUT.PUT_LINE('Code = '||return_code||', '||status);
+END;
+/
