@@ -1,0 +1,16 @@
+DROP SEQUENCE my_sequence;
+DROP TABLE test_table;
+
+CREATE SEQUENCE my_sequence START WITH 1 MAXVALUE 100000;
+CREATE TABLE test_table (
+    my_number number(7) NOT NULL PRIMARY KEY,
+    city varchar(20) NOT NULL
+);
+
+INSERT INTO test_table VALUES (my_sequence.NEXTVAL, 'Novosibirsk'||my_sequence.CURRVAL);
+INSERT INTO test_table VALUES (my_sequence.NEXTVAL, 'Tomsk'||my_sequence.CURRVAL);
+INSERT INTO test_table VALUES (my_sequence.NEXTVAL, 'Saint-Peterburg'||my_sequence.CURRVAL);
+
+COMMIT;
+
+SELECT * FROM test_table;

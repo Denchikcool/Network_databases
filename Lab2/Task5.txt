@@ -1,0 +1,30 @@
+DROP SEQUENCE new_seq;
+DROP TABLE MIN_COST_OF_ORDER;
+
+CREATE SEQUENCE new_seq
+    START WITH 5000
+    MAXVALUE 10000000
+    INCREMENT BY 2;
+
+CREATE TABLE MIN_COST_OF_ORDER (
+    id number(10) NOT NULL PRIMARY KEY,
+    saller_name varchar2(20) NOT NULL,
+    min_price number(7,2) NOT NULL
+);
+
+DECLARE
+    CURSOR cur1 IS SELECT sname, MIN(amt) AS min_amount FROM sal INNER JOIN ord ON ord.snum = sal.snum GROUP BY sname ORDER BY min_amount;
+
+BEGIN
+    FOR info IN cur1 LOOP
+        IF cur1%NOTFOUND then
+            EXIT;
+        END IF;
+        INSERT INTO MIN_COST_OF_ORDER VALUES (new_seq.NEXTVAL, info.sname, info.min_amount);
+    END LOOP;
+    COMMIT;
+END;
+/
+
+SELECT * FROM MIN_COST_OF_ORDER;
+

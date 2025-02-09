@@ -1,0 +1,27 @@
+DROP TABLE sallers; 
+CREATE TABLE sallers (
+    saller_name varchar2(10), 
+    saller_comm number(7,2)
+);
+DECLARE 
+    sal_name varchar2(10);
+    sal_comm number(7,2);
+    count_rows number(10);
+    CURSOR cur1 IS SELECT sname, comm FROM sal WHERE city <> 'London';
+BEGIN
+    OPEN cur1;
+    count_rows := 0;
+    LOOP
+        FETCH cur1 INTO sal_name, sal_comm;
+        EXIT WHEN cur1%NOTFOUND;
+        INSERT INTO sallers VALUES (sal_name, sal_comm);
+        count_rows := count_rows + 1;
+        IF count_rows >= 2 then
+            EXIT;
+        END IF;
+    END LOOP;
+    CLOSE cur1;
+END;
+/
+SELECT * FROM sallers;
+        

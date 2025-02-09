@@ -1,0 +1,8 @@
+DECLARE 
+    CURSOR cur_date(p_date date) IS SELECT * FROM ord WHERE odate > p_date;
+BEGIN
+    FOR order_date IN cur_date('01/04/2010') LOOP
+        DBMS_OUTPUT.PUT_LINE('Number of order: '||order_date.onum||', amount = '||order_date.amt||', date = '||order_date.odate||', client_number = '||order_date.cnum||', saller number = '||order_date.snum);
+    END LOOP;
+END;
+/
