@@ -1,0 +1,44 @@
+CREATE OR REPLACE PACKAGE count_cust_and_sal IS
+    PROCEDURE count_sal (name_of_city IN varchar2);
+    PROCEDURE count_cust (name_of_city IN varchar2);
+END count_cust_and_sal;
+/
+
+CREATE OR REPLACE PACKAGE BODY count_cust_and_sal IS
+    counter number(5);
+    PROCEDURE count_sal (name_of_city IN varchar2) IS
+        CURSOR cur_sal(nameCity varchar2) IS SELECT snum FROM sal WHERE city = nameCity;
+        BEGIN
+            counter := 0;
+            FOR info IN cur_sal(name_of_city) LOOP
+                IF cur_sal%NOTFOUND THEN
+                    EXIT;
+                END IF;
+                counter := counter + 1;
+            END LOOP;
+            DBMS_OUTPUT.PUT_LINE('Count sallers in '||name_of_city||' is '||counter||'.');
+            counter := 0;
+        END count_sal;
+    PROCEDURE count_cust (name_of_city IN varchar2) IS
+        CURSOR cur_cust(nameCity varchar2) IS SELECT cnum FROM cust WHERE city = nameCity;
+        BEGIN
+            counter := 0;
+            FOR info IN cur_cust(name_of_city) LOOP
+                IF cur_cust%NOTFOUND THEN
+                    EXIT;
+                END IF;
+                counter := counter + 1;
+            END LOOP;
+            DBMS_OUTPUT.PUT_LINE('Count customers in '||name_of_city||' is '||counter||'.');
+            counter := 0;
+        END count_cust;
+END count_cust_and_sal;
+/
+
+BEGIN
+    count_cust_and_sal.count_sal('San Jose');
+    count_cust_and_sal.count_cust('Barcelona');
+END;
+/
+                   
+

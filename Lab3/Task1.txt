@@ -1,0 +1,33 @@
+DROP TABLE DEP;
+DROP SEQUENCE seq_client_id;
+
+CREATE SEQUENCE seq_client_id
+    START WITH 1
+    MAXVALUE 10
+    INCREMENT BY 2; 
+
+CREATE TABLE DEP (
+    client_id number(2) NOT NULL PRIMARY KEY,
+    client_department number(5) NOT NULL,
+    client_name varchar2(10) NOT NULL
+);
+
+INSERT INTO DEP VALUES (seq_client_id.NEXTVAL, 10, 'Denis');
+INSERT INTO DEP VALUES (seq_client_id.NEXTVAL, 22, 'Misha');
+INSERT INTO DEP VALUES (seq_client_id.NEXTVAL, 667, 'Kirill');
+INSERT INTO DEP VALUES (seq_client_id.NEXTVAL, 1, 'Nikita');
+
+SELECT * FROM DEP;
+
+CREATE OR REPLACE PROCEDURE change_department(oldDepartment number, newDepartment number) AS
+    BEGIN
+        UPDATE DEP SET client_department = newDepartment WHERE client_department = oldDepartment;
+    END;
+/
+
+BEGIN
+    change_department(22, 421);
+END;
+/
+
+SELECT * FROM DEP;

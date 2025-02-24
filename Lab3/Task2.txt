@@ -1,0 +1,38 @@
+CREATE OR REPLACE FUNCTION get_rubles_str(whole_part number) RETURN varchar2 IS
+BEGIN
+    IF mod(whole_part, 10) = 1 AND mod(whole_part, 100) != 11 THEN
+        RETURN whole_part || ' рубль';
+    ELSIF mod(whole_part, 10) < 5 AND mod(whole_part, 10) > 1 AND mod(whole_part, 100) != 12 AND mod(whole_part, 100) != 13 AND mod(whole_part, 100) != 14 THEN
+        RETURN whole_part || ' рубля';
+    ELSE 
+        RETURN whole_part || ' рублей';
+    END IF;
+END;
+/
+CREATE OR REPLACE FUNCTION get_kopeks_str(remaining_part number) RETURN varchar2 IS
+BEGIN
+    IF mod(remaining_part, 10) = 1 AND mod(remaining_part, 100) != 11 THEN
+        RETURN remaining_part || ' копейка';
+    ELSIF mod(remaining_part, 10) < 5 AND mod(remaining_part, 10) > 1 AND mod(remaining_part, 100) != 12 AND mod(remaining_part, 100) != 13 AND mod(remaining_part, 100) != 14 THEN
+        RETURN remaining_part || ' копейки';
+    ELSE 
+        RETURN remaining_part || ' копеек';
+    END IF;
+END;
+/
+CREATE OR REPLACE FUNCTION money(amt IN number) RETURN varchar2 IS
+    remaining_part number;
+    whole_part number;
+    str varchar2(100);
+BEGIN
+    whole_part := trunc(amt);
+    remaining_part := round((amt - whole_part) * 100);
+    
+    str := get_rubles_str(whole_part) || ' ' || get_kopeks_str(remaining_part);
+    
+    DBMS_OUTPUT.put_line(str);
+    RETURN str;
+END;
+/
+
+SELECT ord.onum, money(ord.amt) FROM ord;

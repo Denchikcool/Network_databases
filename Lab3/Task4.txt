@@ -1,0 +1,45 @@
+CREATE OR REPLACE PACKAGE Library_Pack IS
+    PROCEDURE find_max(surname1 IN varchar2, surname2 IN varchar2);
+    PROCEDURE find_min(surname1 IN varchar2, surname2 IN varchar2);
+END Library_Pack;
+/
+
+CREATE OR REPLACE PACKAGE My_Pack IS
+    PROCEDURE connect_to_library(surname1 IN varchar2, surname2 IN varchar2);
+END My_Pack;
+/
+
+CREATE OR REPLACE PACKAGE BODY Library_Pack IS
+    PROCEDURE find_max(surname1 IN varchar2, surname2 IN varchar2) IS
+    BEGIN
+        IF LENGTH(surname1) > LENGTH(surname2) THEN
+            DBMS_OUTPUT.PUT_LINE('Max surname is '||surname1);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('Max surname is '||surname2);
+        END IF;
+    END find_max;
+
+    PROCEDURE find_min(surname1 IN varchar2, surname2 IN varchar2) IS
+    BEGIN
+        IF LENGTH(surname1) < LENGTH(surname2) THEN
+            DBMS_OUTPUT.PUT_LINE('Min surname is '||surname1);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('Min surname is '||surname2);
+        END IF;
+    END find_min;
+END Library_Pack;
+/
+
+CREATE OR REPLACE PACKAGE BODY My_Pack IS
+    PROCEDURE connect_to_library(surname1 IN varchar2, surname2 IN varchar2) IS
+    BEGIN
+        Library_Pack.find_max(surname1, surname2);
+        Library_Pack.find_min(surname1, surname2);
+    END connect_to_library;
+END My_Pack;
+/
+
+BEGIN
+    My_Pack.connect_to_library('Kuzmenok', 'Gavenko');
+END;
+/
