@@ -1,0 +1,68 @@
+DROP TABLE customer_info;
+DROP TABLE trigger_info;
+DROP SEQUENCE my_seq;
+
+CREATE SEQUENCE my_seq
+    START WITH 1
+    MAXVALUE 20
+    INCREMENT BY 3;
+
+CREATE TABLE customer_info(
+    client_id number(3) NOT NULL PRIMARY KEY,
+    client_name varchar2(20) NOT NULL,
+    client_age number(3) NOT NULL,
+    client_city varchar2(20) NOT NULL
+);
+
+CREATE TABLE trigger_info(
+    command_name varchar2(20) NOT NULL,
+    table_name varchar2(20) NOT NULL,
+    name_editor varchar2(20) NOT NULL,
+    edit_date date NOT NULL
+);
+
+CREATE TRIGGER my_trigger AFTER INSERT OR DELETE OR UPDATE ON customer_info
+FOR EACH ROW
+BEGIN
+    IF INSERTING THEN
+        INSERT INTO trigger_info(command_name, table_name, name_editor, edit_date) VALUES ('INSERT', 'customer_info', user, sysdate);
+    END IF;
+
+    IF DELETING THEN
+        INSERT INTO trigger_info(command_name, table_name, name_editor, edit_date) VALUES ('DELETE', 'customer_info', user, sysdate);
+    END IF;
+
+    IF UPDATING THEN
+        INSERT INTO trigger_info(command_name, table_name, name_editor, edit_date) VALUES ('UPDATE', 'customer_info', user, sysdate);
+    END IF;
+END
+/
+
+CREATE TRIGGER trigger_no_rome BEFORE INSERT OR UPDATE ON customer_info
+FOR EACH ROW
+DECLARE
+    rome_error exception;
+    PRAGMA EXCEPTION_INIT(rome_error, -20001);
+BEGIN
+    IF UPPER(:NEW.client_city) = 'ROME' THEN
+        RAISE rome_error;
+    END IF;
+    EXCEPTION
+        WHEN rome_error THEN
+            RAISE_APPLICATION_ERROR(-20001, 'You cannot use Rome in this table!');
+END;
+/
+
+
+INSERT INTO customer_info VALUES (my_seq.NEXTVAL, 'Denis', 22, 'Novosibirs');
+INSERT INTO customer_info VALUES (my_seq.NEXTVAL, 'Sergay', 20, 'Tomsk');
+INSERT INTO customer_info VALUES (my_seq.NEXTVAL, 'Egor', 30, 'Moscow');
+INSERT INTO customer_info VALUES (my_seq.NEXTVAL, 'VectorASD', 5, 'Norilsk');
+INSERT INTO customer_info VALUES (my_seq.NEXTVAL, 'Nikita', 25, 'Saint-Peterburg');
+DELETE FROM customer_info WHERE client_name = 'VectorASD';
+UPDATE customer_info SET client_id = 99 WHERE client_name = 'Denis';
+INSERT INTO customer_info VALUES (my_seq.NEXTVAL, 'Nikita', 25, 'Rome');
+UPDATE customer_info SET client_city = 'Rome' WHERE client_name = 'Egor';
+
+SELECT * FROM customer_info;
+SELECT * FROM trigger_info;

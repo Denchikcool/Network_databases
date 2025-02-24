@@ -1,0 +1,36 @@
+DROP TABLE mySal;
+DROP TABLE myCust;
+DROP TABLE myOrd;
+
+--CREATE TABLE mySal AS SELECT snum, sname, city, comm FROM sal;
+--CREATE TABLE myCust AS SELECT cnum, cname, city, rating, snum FROM cust;
+--CREATE TABLE myOrd AS SELECT onum, amt, odate, cnum, snum FROM ord;
+
+CREATE TABLE mySal AS SELECT * FROM sal;
+CREATE TABLE myCust AS SELECT * FROM cust;
+CREATE TABLE myOrd AS SELECT * FROM ord;
+
+SELECT * FROM mySal;
+SELECT * FROM myCust;
+SELECT * FROM myOrd;
+
+DELETE FROM mySal;
+DELETE FROM myCust;
+TRUNCATE TABLE myOrd;
+ROLLBACK;
+
+BEGIN 
+    DBMS_OUTPUT.PUT_LINE('Table contents (mySal):');
+    FOR info_sal IN (SELECT * FROM mySal) LOOP
+        DBMS_OUTPUT.PUT_LINE(info_sal.snum || ' ' || info_sal.sname || ' ' || info_sal.city || ' ' || info_sal.comm);
+    END LOOP;
+    DBMS_OUTPUT.PUT_LINE('Table contents (myCust):');
+    FOR info_cust IN (SELECT * FROM myCust) LOOP
+        DBMS_OUTPUT.PUT_LINE(info_cust.cnum || ' ' || info_cust.cname || ' ' || info_cust.city || ' ' || info_cust.rating || ' ' || info_cust.snum);
+    END LOOP;
+    DBMS_OUTPUT.PUT_LINE('Table contents (myOrd):');
+    FOR info_ord IN (SELECT * FROM myOrd) LOOP
+        DBMS_OUTPUT.PUT_LINE(info_ord.onum || ' ' || info_ord.amt || ' ' || info_ord.odate || ' ' || info_ord.cnum || ' ' || info_ord.snum);
+    END LOOP;
+END;
+/

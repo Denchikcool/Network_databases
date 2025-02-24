@@ -1,0 +1,37 @@
+DROP TABLE customer_info;
+DROP TABLE trigger_info;
+DROP SEQUENCE my_seq;
+
+CREATE SEQUENCE my_seq
+    START WITH 1
+    MAXVALUE 20
+    INCREMENT BY 2;
+
+CREATE TABLE customer_info(
+    client_id number(3) NOT NULL PRIMARY KEY,
+    client_name varchar2(20) NOT NULL,
+    client_age number(3) NOT NULL,
+    client_city varchar2(20) NOT NULL
+);
+
+CREATE TABLE trigger_info(
+    command_name varchar2(20) NOT NULL,
+    table_name varchar2(20) NOT NULL,
+    name_editor varchar2(20) NOT NULL,
+    edit_date date NOT NULL
+);
+
+CREATE TRIGGER my_trigger AFTER INSERT ON customer_info
+BEGIN
+    INSERT INTO trigger_info(command_name, table_name, name_editor, edit_date) VALUES ('INSERT', 'customer_info', user, sysdate);
+END
+/
+
+INSERT INTO customer_info VALUES (my_seq.NEXTVAL, 'Denis', 22, 'Novosibirs');
+INSERT INTO customer_info VALUES (my_seq.NEXTVAL, 'Sergay', 20, 'Tomsk');
+INSERT INTO customer_info VALUES (my_seq.NEXTVAL, 'Egor', 30, 'Moscow');
+INSERT INTO customer_info VALUES (my_seq.NEXTVAL, 'VectorASD', 5, 'Norilsk');
+INSERT INTO customer_info VALUES (my_seq.NEXTVAL, 'Nikita', 25, 'Saint-Peterburg');
+
+SELECT * FROM customer_info;
+SELECT * FROM trigger_info;
