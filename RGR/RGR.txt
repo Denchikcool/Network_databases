@@ -1,0 +1,250 @@
+DROP TABLE scientific_conference;
+DROP TABLE conference_participant;
+DROP SEQUENCE conference_seq;
+DROP SEQUENCE participant_seq;
+
+CREATE OR REPLACE PACKAGE initializing_tables AS
+    PROCEDURE fill_data;
+    PROCEDURE clean_tables;
+END initializing_tables;
+/
+
+CREATE SEQUENCE conference_seq
+    START WITH 1
+    INCREMENT BY 1;
+CREATE SEQUENCE participant_seq
+    START WITH 1
+    INCREMENT BY 1;
+
+CREATE TABLE conference_participant (
+    participant_id NUMBER NOT NULL,
+    participant_gender VARCHAR2(50) NOT NULL,
+    participant_full_name VARCHAR2(200) NOT NULL,
+    participant_age NUMBER NOT NULL,
+
+    CONSTRAINT conference_participant_id_pk PRIMARY KEY (participant_id)
+);
+
+CREATE TABLE scientific_conference (
+    conference_id NUMBER NOT NULL,
+    conference_name VARCHAR2(300) NOT NULL,
+    conference_speaker NUMBER NOT NULL,
+    conference_city VARCHAR2(100) NOT NULL,
+    conference_date DATE NOT NULL,
+
+    CONSTRAINT scientific_conference_id_pk PRIMARY KEY (conference_id),
+    CONSTRAINT scientific_conference_speaker_fk FOREIGN KEY (conference_speaker) REFERENCES conference_participant(participant_id) ON DELETE CASCADE
+);
+
+CREATE OR REPLACE PACKAGE BODY initializing_tables AS
+    PROCEDURE fill_data IS
+        BEGIN
+            initializing_tables.clean_tables;
+            INSERT INTO conference_participant VALUES (participant_seq.NEXTVAL, 'Мужской', 'Кузьменок Денис Витальевич', 22);
+            INSERT INTO conference_participant VALUES (participant_seq.NEXTVAL, 'Женский', 'Набережных Анна Сергеевна', 23);
+            INSERT INTO conference_participant VALUES (participant_seq.NEXTVAL, 'Мужской', 'Боринский Павел Дмитриевич', 19);
+            INSERT INTO conference_participant VALUES (participant_seq.NEXTVAL, 'Мужской', 'Сопельник Дмитрий Георгевич', 30);
+            INSERT INTO conference_participant VALUES (participant_seq.NEXTVAL, 'Мужской', 'Селезнев Виталий Васильевич', 15);
+            INSERT INTO conference_participant VALUES (participant_seq.NEXTVAL, 'Женский', 'Левченко Валерия Борисовна', 24);
+            INSERT INTO conference_participant VALUES (participant_seq.NEXTVAL, 'Женский', 'Морозова Диана Денисовна', 18);
+            INSERT INTO conference_participant VALUES (participant_seq.NEXTVAL, 'Мужской', 'Тропин Никита Васильевич', 23);
+            INSERT INTO conference_participant VALUES (participant_seq.NEXTVAL, 'Женский', 'Анохина Яна Владимировна', 23);
+            INSERT INTO conference_participant VALUES (participant_seq.NEXTVAL, 'Мужской', 'Ленин Владимир Ильич', 16);
+
+            INSERT INTO scientific_conference VALUES (conference_seq.NEXTVAL, 'Актуальные вопросы развития научных исследований: теоретический и практический взгляд', 4, 'Новосибирск', to_date('24.02.2025', 'dd.mm.yyyy'));
+            INSERT INTO scientific_conference VALUES (conference_seq.NEXTVAL, 'Актуальные вопросы развития научных исследований: теоретический и практический взгляд', 5, 'Новосибирск', to_date('24.02.2025', 'dd.mm.yyyy'));
+            INSERT INTO scientific_conference VALUES (conference_seq.NEXTVAL, 'Актуальные вопросы развития научных исследований: теоретический и практический взгляд', 7, 'Новосибирск', to_date('24.02.2025', 'dd.mm.yyyy'));
+            INSERT INTO scientific_conference VALUES (conference_seq.NEXTVAL, 'Актуальные вопросы развития научных исследований: теоретический и практический взгляд', 2, 'Новосибирск', to_date('24.02.2025', 'dd.mm.yyyy'));
+            INSERT INTO scientific_conference VALUES (conference_seq.NEXTVAL, 'Актуальные научные исследования', 6, 'Саратов', to_date('17.03.2025', 'dd.mm.yyyy'));
+            INSERT INTO scientific_conference VALUES (conference_seq.NEXTVAL, 'Актуальные научные исследования', 1, 'Саратов', to_date('17.03.2025', 'dd.mm.yyyy'));
+            INSERT INTO scientific_conference VALUES (conference_seq.NEXTVAL, 'Актуальные научные исследования', 9, 'Саратов', to_date('17.03.2025', 'dd.mm.yyyy'));
+            INSERT INTO scientific_conference VALUES (conference_seq.NEXTVAL, 'Лучшие научные исследования студентов и учащихся', 10, 'Мичуринск', to_date('01.06.2025', 'dd.mm.yyyy'));
+            INSERT INTO scientific_conference VALUES (conference_seq.NEXTVAL, 'Лучшие научные исследования студентов и учащихся', 3, 'Мичуринск', to_date('01.06.2025', 'dd.mm.yyyy'));
+            INSERT INTO scientific_conference VALUES (conference_seq.NEXTVAL, 'Актуальные вопросы науки, общества и образования', 10, 'Тюмень', to_date('09.09.2025', 'dd.mm.yyyy'));
+            INSERT INTO scientific_conference VALUES (conference_seq.NEXTVAL, 'Актуальные вопросы науки, общества и образования', 7, 'Тюмень', to_date('09.09.2025', 'dd.mm.yyyy'));
+            INSERT INTO scientific_conference VALUES (conference_seq.NEXTVAL, 'Актуальные вопросы науки, общества и образования', 9, 'Тюмень', to_date('09.09.2025', 'dd.mm.yyyy'));
+            INSERT INTO scientific_conference VALUES (conference_seq.NEXTVAL, 'Актуальные вопросы науки, общества и образования', 8, 'Тюмень', to_date('09.09.2025', 'dd.mm.yyyy'));
+            INSERT INTO scientific_conference VALUES (conference_seq.NEXTVAL, 'Актуальные вопросы науки, общества и образования', 6, 'Тюмень', to_date('09.09.2025', 'dd.mm.yyyy'));
+            INSERT INTO scientific_conference VALUES (conference_seq.NEXTVAL, 'Развитие науки и практики в глобально меняющемся мире в условиях рисков', 9, 'Чебоксары', to_date('31.12.2025', 'dd.mm.yyyy'));
+            INSERT INTO scientific_conference VALUES (conference_seq.NEXTVAL, 'Развитие науки и практики в глобально меняющемся мире в условиях рисков', 6, 'Чебоксары', to_date('31.12.2025', 'dd.mm.yyyy'));
+            INSERT INTO scientific_conference VALUES (conference_seq.NEXTVAL, 'Развитие науки и практики в глобально меняющемся мире в условиях рисков', 10, 'Чебоксары', to_date('31.12.2025', 'dd.mm.yyyy'));
+            INSERT INTO scientific_conference VALUES (conference_seq.NEXTVAL, 'Экономика и безопасность', 9, 'Петропавловск-Камчатский', to_date('08.10.2025', 'dd.mm.yyyy'));
+            INSERT INTO scientific_conference VALUES (conference_seq.NEXTVAL, 'Границы знаний: междисциплинарный подход в науке', 9, 'Ессентуки', to_date('19.05.2025', 'dd.mm.yyyy'));
+            INSERT INTO scientific_conference VALUES (conference_seq.NEXTVAL, 'Границы знаний: междисциплинарный подход в науке', 2, 'Ессентуки', to_date('19.05.2025', 'dd.mm.yyyy'));
+            INSERT INTO scientific_conference VALUES (conference_seq.NEXTVAL, 'Границы знаний: междисциплинарный подход в науке', 4, 'Ессентуки', to_date('19.05.2025', 'dd.mm.yyyy'));
+            INSERT INTO scientific_conference VALUES (conference_seq.NEXTVAL, 'Мировая глобализация: фундаментальные и прикладные аспекты', 3, 'Североморск', to_date('11.01.2025', 'dd.mm.yyyy'));
+            INSERT INTO scientific_conference VALUES (conference_seq.NEXTVAL, 'Мировая глобализация: фундаментальные и прикладные аспекты', 5, 'Североморск', to_date('11.01.2025', 'dd.mm.yyyy'));
+            INSERT INTO scientific_conference VALUES (conference_seq.NEXTVAL, 'Финансово-экономический журнал', 4, 'Биробиджан', to_date('13.11.2025', 'dd.mm.yyyy'));
+            INSERT INTO scientific_conference VALUES (conference_seq.NEXTVAL, 'Финансово-экономический журнал', 8, 'Биробиджан', to_date('13.11.2025', 'dd.mm.yyyy'));
+            INSERT INTO scientific_conference VALUES (conference_seq.NEXTVAL, 'Финансово-экономический журнал', 3, 'Биробиджан', to_date('13.11.2025', 'dd.mm.yyyy'));
+            INSERT INTO scientific_conference VALUES (conference_seq.NEXTVAL, 'Горизонты фтизиатрии 2025', 2, 'Шахты', to_date('26.08.2025', 'dd.mm.yyyy'));
+            INSERT INTO scientific_conference VALUES (conference_seq.NEXTVAL, 'Горизонты фтизиатрии 2025', 1, 'Шахты', to_date('26.08.2025', 'dd.mm.yyyy'));
+            INSERT INTO scientific_conference VALUES (conference_seq.NEXTVAL, 'Горизонты фтизиатрии 2025', 3, 'Шахты', to_date('26.08.2025', 'dd.mm.yyyy'));
+            INSERT INTO scientific_conference VALUES (conference_seq.NEXTVAL, 'Горизонты фтизиатрии 2025', 8, 'Шахты', to_date('26.08.2025', 'dd.mm.yyyy'));
+            INSERT INTO scientific_conference VALUES (conference_seq.NEXTVAL, 'Горизонты фтизиатрии 2025', 5, 'Шахты', to_date('26.08.2025', 'dd.mm.yyyy'));
+            COMMIT;
+    END fill_data;
+    PROCEDURE clean_tables IS
+        cleaning_problem exception;
+        PRAGMA EXCEPTION_INIT(cleaning_problem, -20001);
+        BEGIN
+            EXECUTE IMMEDIATE 'TRUNCATE TABLE scientific_conference';
+            EXECUTE IMMEDIATE 'TRUNCATE TABLE conference_participant';
+            EXECUTE IMMEDIATE 'DROP SEQUENCE conference_seq';
+            EXECUTE IMMEDIATE 'DROP SEQUENCE participant_seq';
+            EXECUTE IMMEDIATE 'CREATE SEQUENCE conference_seq';
+            EXECUTE IMMEDIATE 'CREATE SEQUENCE participant_seq';
+        EXCEPTION WHEN cleaning_problem THEN
+            ROLLBACK;
+            RAISE_APPLICATION_ERROR(-20001, 'Problems with cleaning tables!');
+    END clean_tables;
+END initializing_tables;
+/
+
+CREATE OR REPLACE TRIGGER delete_trigger BEFORE DELETE ON conference_participant
+DECLARE
+    start_time_of_day TIMESTAMP;
+    end_time_of_day TIMESTAMP;
+    current_time_of_day TIMESTAMP;
+BEGIN
+    current_time_of_day := current_timestamp at time zone 'Asia/Novosibirsk';
+    start_time_of_day := (trunc(current_time_of_day) + 9/24);
+    end_time_of_day := (trunc(current_time_of_day) + 18/24);
+
+    IF ((current_time_of_day < start_time_of_day) OR (current_time_of_day > end_time_of_day)) THEN
+        RAISE_APPLICATION_ERROR(-20003, 'Удаление записи возможно только в рабочее время!');
+    END IF;
+END;
+/
+
+CREATE OR REPLACE VIEW conference_view AS
+SELECT
+    cp.participant_full_name AS speaker_name,
+    cp.participant_gender,
+    sc.conference_name,
+    sc.conference_city
+FROM
+    conference_participant cp
+JOIN
+    scientific_conference sc ON cp.participant_id = sc.conference_speaker
+WHERE
+    sc.conference_date > CURRENT_DATE
+    AND cp.participant_gender = 'Женский';
+
+
+CREATE OR REPLACE PACKAGE conference_management AS
+    PROCEDURE initialize_data;
+    PROCEDURE clean_all_tables;
+    PROCEDURE delete_participant(p_participant_id IN NUMBER);
+    PROCEDURE show_min_conference_participants;
+    PROCEDURE show_conference_count_per_participant;
+END conference_management;
+/
+
+CREATE OR REPLACE PACKAGE BODY conference_management AS
+    PROCEDURE initialize_data IS
+    BEGIN
+        initializing_tables.fill_data;
+        DBMS_OUTPUT.PUT_LINE('Данные успешно инициализированы.');
+    EXCEPTION
+        WHEN OTHERS THEN
+            RAISE_APPLICATION_ERROR(-20005, 'Ошибка при инициализации данных: ' || SQLERRM);
+    END initialize_data;
+
+    PROCEDURE clean_all_tables IS
+    BEGIN
+        initializing_tables.clean_tables;
+        DBMS_OUTPUT.PUT_LINE('Таблицы успешно очищены.');
+    EXCEPTION
+        WHEN OTHERS THEN
+            RAISE_APPLICATION_ERROR(-20006, 'Ошибка при очистке таблиц: ' || SQLERRM);
+    END clean_all_tables;
+
+    PROCEDURE delete_participant(p_participant_id IN NUMBER) IS
+    BEGIN
+        DELETE FROM conference_participant WHERE participant_id = p_participant_id;
+        COMMIT;
+    EXCEPTION
+        WHEN OTHERS THEN
+            ROLLBACK;
+            RAISE_APPLICATION_ERROR(-20002, 'Ошибка при удалении участника: ' || SQLERRM);
+    END delete_participant;
+
+    PROCEDURE show_min_conference_participants IS
+        TYPE participant_cursor IS REF CURSOR;
+        v_cursor participant_cursor;
+        v_participant_id conference_participant.participant_id%TYPE;
+        v_participant_name conference_participant.participant_full_name%TYPE;
+        v_conference_count NUMBER;
+        v_sql VARCHAR2(1000);
+    BEGIN
+        DBMS_OUTPUT.PUT_LINE('Участники с минимальным количеством конференций: ');
+        v_sql := 'WITH conference_counts AS ( ' ||
+                 '    SELECT cp.participant_id, cp.participant_full_name, COUNT(sc.conference_id) as conference_count ' ||
+                 '    FROM conference_participant cp ' ||
+                 '    LEFT JOIN scientific_conference sc ON cp.participant_id = sc.conference_speaker ' ||
+                 '    GROUP BY cp.participant_id, cp.participant_full_name ' ||
+                 ') ' ||
+                 'SELECT participant_id, participant_full_name, conference_count ' ||
+                 'FROM conference_counts ' ||
+                 'WHERE conference_count = (SELECT MIN(conference_count) FROM conference_counts)';
+
+        OPEN v_cursor FOR v_sql;
+        LOOP
+            FETCH v_cursor INTO v_participant_id, v_participant_name, v_conference_count;
+            EXIT WHEN v_cursor%NOTFOUND;
+            DBMS_OUTPUT.PUT_LINE('Участник: ' || v_participant_name || ' (ID: ' || v_participant_id || ') участвует в ' || v_conference_count || ' конференциях.');
+        END LOOP;
+        CLOSE v_cursor;
+    EXCEPTION
+        WHEN OTHERS THEN
+            RAISE_APPLICATION_ERROR(-20003, 'Ошибка при выводе участников: ' || SQLERRM);
+    END show_min_conference_participants;
+
+    PROCEDURE show_conference_count_per_participant IS
+        TYPE participant_cursor IS REF CURSOR;
+        v_cursor participant_cursor;
+        v_participant_id conference_participant.participant_id%TYPE;
+        v_participant_name conference_participant.participant_full_name%TYPE;
+        v_conference_count NUMBER;
+        v_sql VARCHAR2(1000);
+    BEGIN
+        v_sql := 'SELECT cp.participant_id, cp.participant_full_name, COUNT(sc.conference_id) as conference_count ' ||
+                 'FROM conference_participant cp ' ||
+                 'LEFT JOIN scientific_conference sc ON cp.participant_id = sc.conference_speaker ' ||
+                 'GROUP BY cp.participant_id, cp.participant_full_name ' ||
+                 'ORDER BY cp.participant_id';
+
+        OPEN v_cursor FOR v_sql;
+        LOOP
+            FETCH v_cursor INTO v_participant_id, v_participant_name, v_conference_count;
+            EXIT WHEN v_cursor%NOTFOUND;
+            DBMS_OUTPUT.PUT_LINE('Участник: ' || v_participant_name || ' (ID: ' || v_participant_id || ') участвует в ' || v_conference_count || ' конференциях.');
+        END LOOP;
+        CLOSE v_cursor;
+    EXCEPTION
+        WHEN OTHERS THEN
+            RAISE_APPLICATION_ERROR(-20004, 'Ошибка при выводе количества конференций: ' || SQLERRM);
+    END show_conference_count_per_participant;
+END conference_management;
+/
+
+GRANT SELECT ON conference_view TO PUBLIC;
+GRANT EXECUTE ON conference_management TO WKSP_MYSBDIP111KUZ;
+SELECT * FROM USER_TAB_PRIVS;
+
+BEGIN
+    conference_management.initialize_data;
+END
+/
+SELECT * FROM conference_participant;
+SELECT * FROM scientific_conference;
+BEGIN
+    conference_management.initialize_data;
+    conference_management.show_conference_count_per_participant;
+    conference_management.delete_participant(1);
+    conference_management.show_min_conference_participants;
+END;
+/
+
+SELECT * FROM conference_view;
